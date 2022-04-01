@@ -1,32 +1,58 @@
-version: '3.7'
+version: '3'
+
 services:
-  master:
+  # 主节点的容器
+  redis-server-master:
     image: redis:3.0.0
-    container_name: redis-master
+    container_name: redis-server-master
     restart: always
-    network_mode: host
-    command: redis-server --requirepass redis1  --appendonly yes
+    network_mode: redisNet
     ports:
       - 6379:6379
+    # 指定时区，保证容器内时间正确
+    environment:
+      TZ: "Asia/Shanghai"
     volumes:
-      - ./data1:/data
-  slave1:
+      # 映射配置文件和数据目录
+      - ./redisMaster.conf:/usr/local/etc/redis/redis.conf
+      - ./redisMaster:/data
+    #sysctls:
+      # 必要的内核参数
+      #net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  # 从节点1的容器
+  redis-server-slave-1:
     image: redis:3.0.0
-    container_name: redis-slave-1
+    container_name: redis-server-slave-1
     restart: always
-    network_mode: host
-    command: redis-server --port 6380 --slaveof redis-master 6379  --requirepass redis2 --masterauth redis1  --appendonly yes
     ports:
       - 6380:6379
+    network_mode: redisNet
+    depends_on:
+      - redis-server-master
+    environment:
+      TZ: "Asia/Shanghai"
     volumes:
-      - ./data2:/data
-  slave2:
+      - ./redisSlave1.conf:/usr/local/etc/redis/redis.conf
+      - ./redisslave1:/data
+    #sysctls:
+      #net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+  # 从节点2的容器
+  redis-server-slave-2:
     image: redis:3.0.0
-    container_name: redis-slave-2
+    container_name: redis-server-slave-2
     restart: always
-    network_mode: host
-    command: redis-server --slaveof redis-master 6379  --requirepass redis3 --masterauth redis1  --appendonly yes
     ports:
       - 6381:6379
+    network_mode: redisNet
+    depends_on:
+      - redis-server-master
+    environment:
+      TZ: "Asia/Shanghai"
     volumes:
-      - ./data3:/data
+      - ./redisSlave2.conf:/usr/local/etc/redis/redis.conf
+      - ./redisSlave2:/data
+    #sysctls:
+      #net.core.somaxconn: '511'
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
