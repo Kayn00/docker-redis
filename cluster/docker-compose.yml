@@ -1,77 +1,152 @@
 version: "3"
 
+networks:
+  redis-cluster:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.26.0.0/24
+
 # 定义服务，可以多个
 services:
   redis-6371: # 服务名称
-    image: redis # 创建容器时所需的镜像
+    image: redis:6.0 # 创建容器时所需的镜像
     container_name: redis-6371 # 容器名称
     restart: always # 容器总是重新启动
     volumes: # 数据卷，目录挂载
-      - ./redis-6371/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6371/data:/data
+      - ./redis6371.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6371:/data
     ports:
-      - 6371:6371
-      - 16371:16371
+      - 6371:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.101
 
   redis-6372:
-    image: redis
+    image: redis:6.0
     container_name: redis-6372
     volumes:
-      - ./redis-6372/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6372/data:/data
+      - ./redis6372.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6372:/data
     ports:
-      - 6372:6372
-      - 16372:16372
+      - 6372:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.102
 
   redis-6373:
-    image: redis
+    image: redis:6.0
     container_name: redis-6373
     volumes:
-      - ./redis-6373/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6373/data:/data
+      - ./redis6373.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6373:/data
     ports:
-      - 6373:6373
-      - 16373:16373
+      - 6373:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.103
 
   redis-6374:
-    image: redis
+    image: redis:6.0
     container_name: redis-6374
     restart: always
     volumes:
-      - ./redis-6374/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6374/data:/data
+      - ./redis6374.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6374:/data
     ports:
-      - 6374:6374
-      - 16374:16374
+      - 6374:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.104
 
   redis-6375:
-    image: redis
+    image: redis:6.0
     container_name: redis-6375
     volumes:
-      - ./redis-6375/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6375/data:/data
+      - ./redis6375.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6375:/data
     ports:
-      - 6375:6375
-      - 16375:16375
+      - 6375:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.105
 
   redis-6376:
-    image: redis
+    image: redis:6.0
     container_name: redis-6376
     volumes:
-      - ./redis-6376/conf/redis.conf:/usr/local/etc/redis/redis.conf
-      - ./redis-6376/data:/data
+      - ./redis6376.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6376:/data
     ports:
-      - 6376:6376
-      - 16376:16376
+      - 6376:6379
     command:
       redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.106
+
+  redis-6377:
+    image: redis:6.0
+    container_name: redis-6377
+    volumes:
+      - ./redis6377.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6377:/data
+    ports:
+      - 6377:6379
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.107
+
+  redis-6378:
+    image: redis:6.0
+    container_name: redis-6378
+    volumes:
+      - ./redis6378.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6378:/data
+    ports:
+      - 6378:6379
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.108
+
+  redis-6379:
+    image: redis:6.0
+    container_name: redis-6379
+    volumes:
+      - ./redis6379.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6379:/data
+    ports:
+      - 6379:6379
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.109
+
+  redis-6380:
+    image: redis:6.0
+    container_name: redis-6380
+    volumes:
+      - ./redis6380.conf:/usr/local/etc/redis/redis.conf
+      - ./redis6380:/data
+    ports:
+      - 6380:6379
+    command:
+      redis-server /usr/local/etc/redis/redis.conf
+    networks:
+      redis-cluster:
+        ipv4_address: 172.26.0.110
